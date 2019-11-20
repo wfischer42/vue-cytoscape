@@ -16,22 +16,22 @@ export default class CyElement extends Vue {
   id: string | undefined = this.definition.data.id
   @Prop({ default: false }) readonly sync!: boolean
 
-  constructor() {
+  constructor () {
     super()
-    if (this.id) this.selector = `#${this.id}`
+    if (this.id) this.selector = `#${ this.id }`
     this.cy.then(this.configure)
   }
 
-  configure(cy: Core) {
+  configure (cy: Core) {
     this.instance = cy
     const ele = this.add()
     if (!this.id) {
       this.id = ele.data().id
-      this.selector = `#${this.id}`
+      this.selector = `#${ this.id }`
     }
   }
 
-  add() {
+  add () {
     const instance = this.instance as Core
     // register all the component events as cytoscape ones
     const register = (eventType: EventNames, f: EventHandler) =>
@@ -69,34 +69,37 @@ export default class CyElement extends Vue {
     return ele
   }
 
-  beforeDestroy() {
+  beforeDestroy () {
     const instance = this.instance as Core
     instance.remove(this.selector)
   }
 
-  get eleData() {
+  get eleData () {
     return this.definition.data
   }
 
-  get position() {
+  get position () {
     return this.definition.position
   }
 
   @Watch('eleData', { deep: true })
-  onDataChange(data: any) {
+  onDataChange (data: any) {
     const instance = this.instance as Core
     const ele = instance.getElementById(this.id as string)
     ele.data(data)
   }
 
   @Watch('position', { deep: true })
-  onPositionChange(position: any) {
+  onPositionChange (position: any) {
     const instance = this.instance as Core
     const ele = instance.getElementById(this.id as string)
+    console.log(this.id)
+    console.log(ele)
+    console.log(position)
     ele.position(JSON.parse(JSON.stringify(position)))
   }
 
-  render(h: (arg0: string) => void) {
+  render (h: (arg0: string) => void) {
     // do nothing
   }
 }
